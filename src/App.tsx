@@ -4,7 +4,8 @@
 //   incrementByAmount,
 // } from "./redux/features/counter/counterSlice";
 
-import { Button } from "./components/ui/button";
+import { Outlet } from "react-router";
+import Navbar from "./components/layout/Navbar";
 
 function App() {
   // const { count } = useAppSelector((state: RootState) => state.counter);
@@ -13,8 +14,9 @@ function App() {
     <>
       <div></div>
       {/* <h1>Counter: {count}</h1> */}
-      <div className="card">
-        <Button>Button</Button>
+      <div>
+        <Navbar />
+        <Outlet />
         {/* <button onClick={() => dispatch(increment())}>Increment 1</button>
         <button onClick={() => dispatch(decrement())}>Decrement 1</button>
         <button onClick={() => dispatch(incrementByAmount(5))}>
