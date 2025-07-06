@@ -34,15 +34,20 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import type { ITask } from "@/types";
+import { useAppDispatch } from "@/redux/hook";
+import { addTask } from "@/redux/features/task/taskSlice";
 
 export default function AddTaskModal() {
+  const dispatch = useAppDispatch();
+
   const form = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = (data: ITask) => {
+    dispatch(addTask(data as ITask));
   };
 
   return (
@@ -113,7 +118,7 @@ export default function AddTaskModal() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="High">High</SelectItem>
-                          <SelectItem value="Medium>">Medium</SelectItem>
+                          <SelectItem value="Medium">Medium</SelectItem>
                           <SelectItem value="Low">Low</SelectItem>
                         </SelectContent>
                       </Select>

@@ -1,6 +1,7 @@
 import type { RootState } from "@/redux/store";
 import type { ITask } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface initialState {
   tasks: ITask[];
@@ -17,22 +18,32 @@ const initialState: initialState = {
       isCompleted: false,
       priority: "High",
     },
-    {
-      id: "asdada45345f",
-      title: "Init Git repo",
-      description: "Create git",
-      dueDate: "2023-01",
-      isCompleted: true,
-      priority: "Medium",
-    },
   ],
   filter: "all",
+};
+
+export type DraftTask = Pick<
+  ITask,
+  "title" | "description" | "dueDate" | "priority"
+>;
+
+const createTask = (taskData: DraftTask) => {
+  return {
+    id: nanoid(),
+    isCompleted: false,
+    ...taskData,
+  };
 };
 
 const taskSlice = createSlice({
   name: "task",
   initialState,
-  reducers: {},
+  reducers: {
+    addTask: (state, action: PayloadAction<DraftTask>) => {
+      const taskData = createTask(action.payload);
+      state.tasks.push(taskData);
+    },
+  },
 });
 
 // export const selectTasks = (state: RootState) => {
@@ -42,5 +53,7 @@ const taskSlice = createSlice({
 export const selectTasks = (state: RootState) => state.todo.tasks;
 
 export const selectFilter = (state: RootState) => state.todo.filter;
+
+export const { addTask } = taskSlice.actions;
 
 export default taskSlice.reducer;
