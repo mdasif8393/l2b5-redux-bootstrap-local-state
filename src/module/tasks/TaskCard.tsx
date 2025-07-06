@@ -1,6 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import {
+  deleteTask,
+  toggleCompleteState,
+} from "@/redux/features/task/taskSlice";
+import { useAppDispatch } from "@/redux/hook";
 import type { ITask } from "@/types";
 import { FaRegTrashAlt } from "react-icons/fa";
 
@@ -9,7 +14,8 @@ interface IProps {
 }
 
 export default function TaskCard({ task }: IProps) {
-  console.log(task);
+  const dispatch = useAppDispatch();
+
   return (
     <div className="border px-5 py-3 rounded-md mb-2">
       <div className="flex justify-between items-center">
@@ -21,13 +27,22 @@ export default function TaskCard({ task }: IProps) {
               "bg-red-500": task.priority === "High",
             })}
           ></div>
-          <h1>{task.title}</h1>
+          <h1 className={cn({ "line-through": task.isCompleted })}>
+            {task.title}
+          </h1>
         </div>
         <div className="flex gap-3 items-center">
-          <Button variant="link" className="p-0 text-red-500">
+          <Button
+            variant="link"
+            className="p-0 text-red-500"
+            onClick={() => dispatch(deleteTask(task.id))}
+          >
             <FaRegTrashAlt />
           </Button>
-          <Checkbox />
+          <Checkbox
+            onClick={() => dispatch(toggleCompleteState(task.id))}
+            checked={task.isCompleted}
+          />
         </div>
       </div>
       <p className="mt-5">{task.description}</p>
